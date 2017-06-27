@@ -2,8 +2,10 @@
 
 #pragma once
 
+#include "TankBarrel.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "TankAimingComponent.generated.h"
 
 
@@ -18,6 +20,8 @@ public:
 
     void SetBarrelReference(UStaticMeshComponent* BarrelToSet);
     
+    // TODO add SetTurretReference
+    
     void AimAt(FVector HitLocation, float LaunchSpeed);
     
 protected:
@@ -28,7 +32,7 @@ private:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
     
-    UStaticMeshComponent* Barrel = nullptr;
+    ATankBarrel* Barrel = nullptr;
     
-	
+    void MoveBarrelTowards(FVector AimDirection);
 };

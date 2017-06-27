@@ -38,7 +38,40 @@ void UTankAimingComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
 {
-    auto OurTankName = GetOwner()->GetName();
-    auto BarrelLocation = Barrel->GetComponentLocation();
-    UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s from %s"), *OurTankName, *HitLocation.ToString(), *BarrelLocation.ToString());
+    if (!Barrel) {return;}
+    
+    FVector OutLaunchVelocity;
+    FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+
+    // Calculate the OutLaunchVelocity
+    bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
+    (
+     this,
+     OutLaunchVelocity,
+     StartLocation,
+     HitLocation,
+     LaunchSpeed
+     );
+
+    if (bHaveAimSolution)
+    {
+        auto AimDirection = OutLaunchVelocity.GetSafeNormal();
+//        auto TankName = GetOwner()->GetName();
+//        UE_LOG(LogTemp, Warning, TEXT("%s aiming at %s"),*TankName, *AimDirection.ToString());
+        MoveBarrelTowards(AimDirection);
+    }
+    // if no solution found do nothing
+}
+
+void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
+{
+    // Work-out difference between current barrel rotation and AimDirection
+    auto BarrelRotator = Barrel->GetForwardVector().Rotation();
+    auto AimAsRotator = AimDirection.Rotation();
+    auto DeltaRotator = AimAsRotator - BarrelRotator;
+    
+    UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *AimAsRotator.ToString())
+    
+    Barrel->Elevate(5); // TODO remove magic number
+    
 }
