@@ -42,6 +42,9 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
     
     FVector OutLaunchVelocity;
     FVector StartLocation = Barrel->GetSocketLocation(FName("Projectile"));
+    
+    FCollisionResponseParams ResponseParam;
+    TArray<AActor *> ActorsToIgnore;
 
     // Calculate the OutLaunchVelocity
     bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity
@@ -50,8 +53,15 @@ void UTankAimingComponent::AimAt(FVector HitLocation, float LaunchSpeed)
      OutLaunchVelocity,
      StartLocation,
      HitLocation,
-     LaunchSpeed
-     );
+     LaunchSpeed,
+     false,
+     0,
+     0,
+     ESuggestProjVelocityTraceOption::DoNotTrace,
+     ResponseParam,
+     ActorsToIgnore,
+     false
+    );
 
     auto Time = GetWorld()->GetTimeSeconds();
     if (bHaveAimSolution)
@@ -77,6 +87,6 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
     
 //    UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *AimAsRotator.ToString())
     
-    Barrel->Elevate(5); // TODO remove magic number
+    Barrel->Elevate(DeltaRotator.Pitch); // TODO remove magic number
     
 }
