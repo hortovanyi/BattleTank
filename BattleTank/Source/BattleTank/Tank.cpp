@@ -26,6 +26,11 @@ void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void ATank::Fire() {
+    auto Time = GetWorld()->GetTimeSeconds();
+    UE_LOG(LogTemp, Warning, TEXT("%f: Tank fire"), Time);
+}
+
 void ATank::AimAt(FVector HitLocation)
 {
     TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
