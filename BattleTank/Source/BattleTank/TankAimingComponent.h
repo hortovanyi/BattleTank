@@ -3,13 +3,11 @@
 #pragma once
 
 #include "TankBarrel.h"
+#include "TankTurret.h"
 #include "Runtime/Engine/Classes/Kismet/GameplayStatics.h"
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "TankAimingComponent.generated.h"
-
-// Forward Declaration
-class UTankBarrel;
 
 // Holds barrel's properties and eleavate
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -22,8 +20,7 @@ public:
 	UTankAimingComponent();
 
     void SetBarrelReference(UTankBarrel* BarrelToSet);
-    
-    // TODO add SetTurretReference
+    void SetTurretReference(UTankTurret* TurretToSet);
     
     void AimAt(FVector HitLocation, float LaunchSpeed);
     
@@ -36,6 +33,7 @@ private:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
     
     UTankBarrel* Barrel = nullptr;
+    UTankTurret* Turret = nullptr;
     
     void MoveBarrelTowards(FVector AimDirection);
 };

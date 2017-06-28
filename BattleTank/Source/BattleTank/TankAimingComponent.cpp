@@ -15,7 +15,14 @@ UTankAimingComponent::UTankAimingComponent()
 
 void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
 {
-    Barrel = BarrelToSet;
+    if(BarrelToSet)
+        Barrel = BarrelToSet;
+}
+
+void UTankAimingComponent::SetTurretReference(UTankTurret* TurretToSet)
+{
+    if (TurretToSet)
+        Turret = TurretToSet;
 }
 
 // Called when the game starts
@@ -87,6 +94,5 @@ void UTankAimingComponent::MoveBarrelTowards(FVector AimDirection)
     
 //    UE_LOG(LogTemp, Warning, TEXT("AimAsRotator: %s"), *AimAsRotator.ToString())
     
-    Barrel->Elevate(DeltaRotator.Pitch); // TODO remove magic number
-    
+    Barrel->Elevate(DeltaRotator.Pitch);    
 }
